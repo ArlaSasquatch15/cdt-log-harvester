@@ -1,6 +1,9 @@
 # cdt-log-harvester
 log harvester initial implementation code
 
+Aria Shepard 
+als5265@gmail.com
+
 # CDT Security Log Harvester
 
 A Python-based defensive security log collector that monitors Linux system journal events, classifies messages using configurable rules, and records matching events as JSON Lines (JSONL).
