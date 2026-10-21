@@ -1,0 +1,25 @@
+{
+  "output": "output/security-events.jsonl",
+  "rules": {
+    "authentication_failure": [
+      "failed password",
+      "authentication failure",
+      "invalid user",
+      "login failed"
+    ],
+    "privilege_activity": [
+      "sudo",
+      "polkit",
+      "privilege escalation"
+    ],
+    "service_failure": [
+      "failed to start",
+      "service failed",
+      "segfault",
+      "out of memory"
+    ],
+    "custom_test": [
+        "CDT_CUSTOM_RULE_TEST"
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+---
+- name: Deploy CDT Security Log Harvester
+  hosts: log_harvester_hosts
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Validate local collector Python syntax
+      ansible.builtin.command:
+        argv:
+          - python3
+          - -m
+          - py_compile
+          - "{{ playbook_dir }}/collector.py"
+      delegate_to: localhost
+      become: false
+      run_once: true
+      changed_when: false
+
+    - name: Validate local JSON configuration
+      ansible.builtin.command:
+        argv:
+          - python3
+          - -m
+          - json.tool
+          - "{{ playbook_dir }}/config.json"
+      delegate_to: localhost
+      become: false
+      run_once: true
+      changed_when: false
+
+  tasks:
+    - name: Ensure Python is installed
+      ansible.builtin.package:
+        name: python3
+        state: present
+
+    - name: Create collector directory
+      ansible.builtin.file:
+        path: /opt/cdt-log-harvester
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Create output directory without deleting existing logs
+      ansible.builtin.file:
+        path: /opt/cdt-log-harvester/output
+        state: directory
+        owner: root
+        group: root
+        mode: "0750"
+
+    - name: Install collector
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/collector.py"
+        dest: /opt/cdt-log-harvester/collector.py
+        owner: root
+        group: root
+        mode: "0755"
+      notify: Restart log harvester
+
+    - name: Install collector configuration
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/config.json"
+        dest: /opt/cdt-log-harvester/config.json
+        owner: root
+        group: root
+        mode: "0640"
+        backup: true
+      notify: Restart log harvester
+
+    - name: Install systemd service
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/cdt-log-harvester.service"
+        dest: /etc/systemd/system/cdt-log-harvester.service
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart log harvester
+
+    - name: Enable and start log harvester
+      ansible.builtin.systemd:
+        name: cdt-log-harvester.service
+        daemon_reload: true
+        enabled: true
+        state: started
+
+  handlers:
+    - name: Restart log harvester
+      ansible.builtin.systemd:
+        name: cdt-log-harvester.service
+        daemon_reload: true
+        state: restarted
