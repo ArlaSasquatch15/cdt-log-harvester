@@ -1,0 +1,43 @@
+# Private deployment inventory
+inventory.ini
+
+# Collected logs and runtime state
+output/
+*.jsonl
+*.cursor
+collector.log
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+
+# Local environment files
+.env
+.venv/
+venv/
+
+# Editor and operating-system files
+.DS_Store
+*.swp
+*~
+
+
+# Private competition inventory and credentials
+inventory.competition.ini
+inventory.ini
+inventory.private.ini
+*.vault
+.vault_pass
+
+# Local logs and runtime output
+output/
+*.log
+__pycache__/
+*.pyc
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+.venv/
+venv/
