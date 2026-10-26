@@ -1,0 +1,16 @@
+[Unit]
+Description=Doodlebob Security Log Harvester
+After=systemd-journald.service
+Wants=systemd-journald.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/cdt-log-harvester
+ExecStart=/usr/bin/python3 -u /opt/cdt-log-harvester/collector.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

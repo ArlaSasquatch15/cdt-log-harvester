@@ -1,6 +1,6 @@
 ---
 - name: Deploy CDT Security Log Harvester
-  hosts: log_harvester_hosts
+  hosts: linux
   become: true
   gather_facts: true
 
@@ -72,8 +72,8 @@
 
     - name: Install systemd service
       ansible.builtin.copy:
-        src: "{{ playbook_dir }}/cdt-log-harvester.service"
-        dest: /etc/systemd/system/cdt-log-harvester.service
+        src: "{{ playbook_dir }}/doodlebob.service"
+        dest: /etc/systemd/system/doodlebob.service
         owner: root
         group: root
         mode: "0644"
@@ -81,7 +81,7 @@
 
     - name: Enable and start log harvester
       ansible.builtin.systemd:
-        name: cdt-log-harvester.service
+        name: doodlebob.service
         daemon_reload: true
         enabled: true
         state: started
@@ -89,6 +89,6 @@
   handlers:
     - name: Restart log harvester
       ansible.builtin.systemd:
-        name: cdt-log-harvester.service
+        name: doodlebob.service
         daemon_reload: true
         state: restarted

@@ -159,7 +159,7 @@ def main():
 
                 # Ignore this service's own journal output to prevent
                 # recursive collection of its diagnostic messages.
-                if event.get("_SYSTEMD_UNIT") == "cdt-log-harvester.service":
+                if event.get("_SYSTEMD_UNIT") == "doodlebob.service":
                     save_checkpoint(checkpoint_path, cursor)
                     continue
 
